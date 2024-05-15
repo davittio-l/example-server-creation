@@ -26,16 +26,23 @@ const friends = [
 ];
 
 server.on('request', (req, res) => {
-    if (req.url === '/friends') {
+    const items = req.url.split('/');
+
+    if (items[1] === 'friends') {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(friends));
-    } else if (req.url === '/messages') {
+        if (items.length === 3) {
+            const friendIndex = Number(items[2]);
+            res.end(JSON.stringify(friends[friendIndex]));
+        } else {
+            res.end(JSON.stringify(friends));
+        }
+    } else if (items[1] === 'messages') {
         res.setHeader('Content-Type', 'text/html');
         res.write('<html>');
         res.write('<body>');
         res.write('<ul>');
-        res.write('<li>Hello James!</li>');  // Corrected the closing <li> tag
+        res.write('<li>Hello James!</li>');
         res.write('<li>What are your thoughts on astronomy?</li>');
         res.write('</ul>');
         res.write('</body>');
